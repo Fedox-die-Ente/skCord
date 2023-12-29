@@ -9,6 +9,9 @@ import me.fedox.skcord.commands.CommandSkcord;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
+
 public final class SkCord
         extends JavaPlugin {
     SkCord instance;
@@ -24,6 +27,8 @@ public final class SkCord
         }
         Bukkit.getLogger().info("SkCord has been enabled!");
         this.registerCommands();
+
+        this.loadMetrics();
     }
 
     public SkCord getInstance() {
@@ -36,5 +41,10 @@ public final class SkCord
 
     private void registerCommands() {
         Objects.requireNonNull(this.getCommand("skcord")).setExecutor(new CommandSkcord());
+    }
+
+    private void loadMetrics() {
+        Metrics metrics = new Metrics(this, 20590);
+        metrics.addCustomChart(new SimplePie("skript_version", () -> Skript.getVersion().toString()));
     }
 }
