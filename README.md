@@ -23,6 +23,7 @@ Here're some of the project's best features:
 <p>1. Put the skCord.jar into ur plugins folder.</p>
 
 [![SkriptHubViewTheDocs](http://skripthub.net/static/addon/ViewTheDocsButton.png)](http://skripthub.net/docs/?addon=skCord)
+[![Get on skUnity](https://docs.skunity.com/skunity/library/Docs/Assets/assets/images/buttons/v2/get-the-syntax-black.png)](https://docs.skunity.com/syntax/search/addon:skCord)
 <h2>💻 Built with</h2>
 
 Technologies used in the project:
