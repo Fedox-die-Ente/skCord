@@ -4,29 +4,47 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.concurrent.ThreadFactory;
 
 public class WebhookManager {
 
     public static void sendMessage(String url, String message) {
-
         if (url.contains("?thread_id=")) {
             String[] split = url.split("\\?thread_id=");
             String threadId = split[1];
 
-            WebhookClient client = new WebhookClientBuilder(split[0]).setThreadId(Long.parseLong(threadId)).build();
+            Long threadIdLong = Long.parseLong(threadId);
+
+            ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder();
+            threadFactoryBuilder.setNameFormat("Webhook Thread");
+            threadFactoryBuilder.setPriority(5);
+            threadFactoryBuilder.setDaemon(true);
+            threadFactoryBuilder.setUncaughtExceptionHandler((t, e) -> {
+                e.printStackTrace();
+            });
+
+            ThreadFactory threadFactory = threadFactoryBuilder.build();
+
+            WebhookClient client = new WebhookClientBuilder(split[0])
+
+                    .setThreadId(threadIdLong)
+                    .setThreadFactory(threadFactory)
+
+                    .build();
+
             client.send(message);
-            return;
+        } else {
+            WebhookClient client = new WebhookClientBuilder(url).build();
+
+            client.send(message);
         }
-
-        WebhookClient client = new WebhookClientBuilder(url).build();
-
-        client.send(message);
     }
 
     public static void sendEmbed(String webhook, String title, String titleUrl, String description, String color, String thumbnailUrl, String imageUrl, String footer, String footerUrl, String author, String authorUrl, String authorIconUrl, Boolean timestamp) {
@@ -82,11 +100,10 @@ public class WebhookManager {
 
             WebhookClient client = new WebhookClientBuilder(split[0]).setThreadId(Long.parseLong(threadId)).build();
             client.send(builder.build());
-            return;
+        } else {
+            WebhookClient client = new WebhookClientBuilder(webhook).build();
+            client.send(builder.build());
         }
-
-        WebhookClient client = new WebhookClientBuilder(webhook).build();
-        client.send(builder.build());
     }
 
 }
