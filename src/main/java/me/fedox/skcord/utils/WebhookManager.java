@@ -19,7 +19,8 @@ public class WebhookManager {
             String[] split = url.split("\\?thread_id=");
             String threadId = split[1];
 
-            WebhookClient client = new WebhookClientBuilder(url).setThreadId(Long.parseLong(threadId)).build();
+            WebhookClient client = new WebhookClientBuilder(split[0]).setThreadId(Long.parseLong(threadId)).build();
+            client.send(message);
             return;
         }
 
@@ -79,7 +80,7 @@ public class WebhookManager {
             String[] split = webhook.split("\\?thread_id=");
             String threadId = split[1];
 
-            WebhookClient client = new WebhookClientBuilder(webhook).setThreadId(Long.parseLong(threadId)).build();
+            WebhookClient client = new WebhookClientBuilder(split[0]).setThreadId(Long.parseLong(threadId)).build();
             client.send(builder.build());
             return;
         }
