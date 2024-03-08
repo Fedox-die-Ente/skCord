@@ -19,9 +19,9 @@ public final class SkCord
 
     public void onEnable() {
         this.instance = this;
-        this.addon = Skript.registerAddon((JavaPlugin)this);
+        this.addon = Skript.registerAddon(this);
         try {
-            this.addon.loadClasses("me.fedox.skcord", new String[]{"elements"});
+            this.addon.loadClasses("me.fedox.skcord", "elements");
         } catch (IOException e) {
             e.printStackTrace();
         }

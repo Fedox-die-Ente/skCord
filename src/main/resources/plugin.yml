@@ -1,5 +1,5 @@
 name: SkCord
-version: '2.1-RELEASE'
+version: '2.2-RELEASE'
 main: me.fedox.skcord.SkCord
 depend: [Skript]
 authors: [ Fedox ]

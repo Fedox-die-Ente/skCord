@@ -14,7 +14,17 @@ import java.time.ZonedDateTime;
 public class WebhookManager {
 
     public static void sendMessage(String url, String message) {
+
+        if (url.contains("?thread_id=")) {
+            String[] split = url.split("\\?thread_id=");
+            String threadId = split[1];
+
+            WebhookClient client = new WebhookClientBuilder(url).setThreadId(Long.parseLong(threadId)).build();
+            return;
+        }
+
         WebhookClient client = new WebhookClientBuilder(url).build();
+
         client.send(message);
     }
 
@@ -63,6 +73,15 @@ public class WebhookManager {
             OffsetDateTime offsetDateTime = zonedDateTime.toOffsetDateTime();
 
             builder.setTimestamp(offsetDateTime);
+        }
+
+        if (webhook.contains("?thread_id=")) {
+            String[] split = webhook.split("\\?thread_id=");
+            String threadId = split[1];
+
+            WebhookClient client = new WebhookClientBuilder(webhook).setThreadId(Long.parseLong(threadId)).build();
+            client.send(builder.build());
+            return;
         }
 
         WebhookClient client = new WebhookClientBuilder(webhook).build();

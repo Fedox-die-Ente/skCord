@@ -6,7 +6,7 @@
 
   <groupId>me.fedox</groupId>
   <artifactId>skCord</artifactId>
-  <version>2.1-RELEASE</version>
+  <version>2.2-RELEASE</version>
   <packaging>jar</packaging>
 
   <name>skCord</name>
