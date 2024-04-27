@@ -1,0 +1,52 @@
+
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'org.apache.maven.plugins:maven-shade-plugin:3.2.4'
+        classpath 'com.github.johnrengelman:shadow:8.1.1'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group 'me.fedox'
+version '2.2-RELEASE'
+
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java'
+
+repositories {
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url = 'https://oss.sonatype.org/content/groups/public/' }
+    maven { url = 'https://jitpack.io' }
+    maven { url = 'https://maven.enginehub.org/repo/' }
+    maven { url = 'https://repo.skriptlang.org/releases' }
+}
+
+dependencies {
+    shadow  'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
+    shadow 'com.github.SkriptLang:Skript:2.7.3'
+    shadow 'org.jetbrains:annotations:24.0.0'
+    shadow 'org.bstats:bstats-bukkit:3.0.2'
+
+    implementation("club.minnced:discord-webhooks:0.8.4")
+}
+
+shadowJar {
+    minimize()
+}
+
+jar {
+
+    from {
+        configurations.runtimeClasspath.filter{ it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+compileJava.options.encoding = 'UTF-8'
