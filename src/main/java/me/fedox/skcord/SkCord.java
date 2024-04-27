@@ -9,9 +9,6 @@ import me.fedox.skcord.commands.CommandSkcord;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SimplePie;
-
 public final class SkCord
         extends JavaPlugin {
     SkCord instance;
@@ -45,6 +42,6 @@ public final class SkCord
 
     private void loadMetrics() {
         Metrics metrics = new Metrics(this, 20590);
-        metrics.addCustomChart(new SimplePie("skript_version", () -> Skript.getVersion().toString()));
+        metrics.addCustomChart(new Metrics.SimplePie("skript_version", () -> Skript.getVersion().toString()));
     }
 }
