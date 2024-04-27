@@ -5,7 +5,6 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -14,32 +13,37 @@ import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Role by ID")
-@Description("Get a pingable role.")
+import java.util.Objects;
+
+@Name("Emoji by ID")
+@Description("Get a emoji.")
 @Examples({
-        "command pingrole:\n" +
+        "command emoji:\n" +
                 "\ttrigger:\n" +
-                "\t\tset {_role} to role with id \"123456789\"\n" +
-                "\t\tsend \"%{_role}%\" as webhook to \"https://discord.com/api/webhooks/?????/??????\""
+                "\t\tset {_emoji} to emoji named \"wave\" with id \"12345\"\n" +
+                "\t\tsend \"Look at this emoji: %{_emoji}%\" as webhook to \"https://discord.com/api/webhooks/?????/??????\""
 })
-@Since("2.2-RELEASE")
-public class ExprRoleId extends SimpleExpression<String> {
+@Since("2.3-RELEASE")
+public class ExprEmojiId extends SimpleExpression<String> {
 
     static {
-        Skript.registerExpression(ExprRoleId.class, String.class, ExpressionType.PROPERTY,  "role with id %string%");
+        Skript.registerExpression(ExprEmojiId.class, String.class, ExpressionType.PROPERTY,  "emoji named %string% with id %string%");
     }
 
-    private Expression<String> roleId;
+    private Expression<String> emojiId;
+    private Expression<String> emojiName;
 
     @Override
     public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        roleId = (Expression<String>) expressions[0];
+        emojiName = (Expression<String>) expressions[0];
+        emojiId = (Expression<String>) expressions[1];
         return true;
     }
 
     @Override
     protected String[] get(Event event) {
-        return new String[]{"<@&" + roleId.getSingle(event) + ">"};
+        String builder = "<:" + emojiName.getSingle(event) + ":" + emojiId.getSingle(event) + ">";
+        return new String[]{builder};
     }
 
     @Override
@@ -52,9 +56,9 @@ public class ExprRoleId extends SimpleExpression<String> {
         return String.class;
     }
 
-
     @Override
     public String toString(@Nullable Event event, boolean b) {
-        return "role with id " + roleId.toString(event, b);
+        return "emoji with id " + emojiId.toString(event, b) + " and name " + emojiName.toString(event, b);
     }
+
 }

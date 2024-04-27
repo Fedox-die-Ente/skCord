@@ -5,6 +5,8 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import me.fedox.skcord.elements.events.bukkit.WebhookSentEvent;
+import org.bukkit.Bukkit;
 
 
 import java.time.LocalDateTime;
@@ -40,10 +42,12 @@ public class WebhookManager {
                     .build();
 
             client.send(message);
+            Bukkit.getPluginManager().callEvent(new WebhookSentEvent(url, message));
         } else {
             WebhookClient client = new WebhookClientBuilder(url).build();
 
             client.send(message);
+            Bukkit.getPluginManager().callEvent(new WebhookSentEvent(url, message));
         }
     }
 
@@ -100,9 +104,11 @@ public class WebhookManager {
 
             WebhookClient client = new WebhookClientBuilder(split[0]).setThreadId(Long.parseLong(threadId)).build();
             client.send(builder.build());
+            Bukkit.getPluginManager().callEvent(new WebhookSentEvent(webhook, "Currently only working for message webhooks."));
         } else {
             WebhookClient client = new WebhookClientBuilder(webhook).build();
             client.send(builder.build());
+            Bukkit.getPluginManager().callEvent(new WebhookSentEvent(webhook, "Currently only working for message webhooks."));
         }
     }
 

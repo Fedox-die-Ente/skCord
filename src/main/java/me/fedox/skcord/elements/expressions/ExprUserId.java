@@ -5,7 +5,6 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -14,32 +13,32 @@ import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-@Name("Role by ID")
-@Description("Get a pingable role.")
+@Name("User by ID")
+@Description("Get a pingable user.")
 @Examples({
-        "command pingrole:\n" +
+        "command pinguser:\n" +
                 "\ttrigger:\n" +
-                "\t\tset {_role} to role with id \"123456789\"\n" +
-                "\t\tsend \"%{_role}%\" as webhook to \"https://discord.com/api/webhooks/?????/??????\""
+                "\t\tset {_user} to user with id \"123456789\"\n" +
+                "\t\tsend \"Hello %{_user}% how are you?\" as webhook to \"https://discord.com/api/webhooks/?????/??????\""
 })
-@Since("2.2-RELEASE")
-public class ExprRoleId extends SimpleExpression<String> {
+@Since("2.3-RELEASE")
+public class ExprUserId extends SimpleExpression<String>{
 
     static {
-        Skript.registerExpression(ExprRoleId.class, String.class, ExpressionType.PROPERTY,  "role with id %string%");
+        Skript.registerExpression(ExprUserId.class, String.class, ExpressionType.PROPERTY,  "user with id %string%");
     }
 
-    private Expression<String> roleId;
+    private Expression<String> userId;
 
     @Override
     public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        roleId = (Expression<String>) expressions[0];
+        userId = (Expression<String>) expressions[0];
         return true;
     }
 
     @Override
     protected String[] get(Event event) {
-        return new String[]{"<@&" + roleId.getSingle(event) + ">"};
+        return new String[]{"<@" + userId.getSingle(event) + ">"};
     }
 
     @Override
@@ -52,9 +51,8 @@ public class ExprRoleId extends SimpleExpression<String> {
         return String.class;
     }
 
-
     @Override
     public String toString(@Nullable Event event, boolean b) {
-        return "role with id " + roleId.toString(event, b);
+        return "user with id " + userId.toString(event, b);
     }
 }
